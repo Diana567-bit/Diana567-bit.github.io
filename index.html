@@ -143,51 +143,29 @@ body {
 </head>
 <body>
     <div id="popup-container"></div>
-
-    <!-- 背景音乐（使用可直接播放的 MP3 链接） -->
-    <audio id="bg-music" preload="auto" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    <!-- 音乐开关按钮 -->
-    <div id="music-toggle" style="
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.8);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        z-index: 9999;
-        font-size: 18px;
-        color: #ff6b6b;
-    ">♪</div>
-
-<script>
-    const bgMusic = document.getElementById('bg-music');
-    const toggleBtn = document.getElementById('music-toggle');
-
-    // 初始状态：音乐暂停，按钮显示播放图标
-    toggleBtn.textContent = '▶';
-
-    toggleBtn.addEventListener('click', () => {
-        if (bgMusic.paused) {
-            bgMusic.play().catch(e => {
-                console.warn("自动播放被阻止，请确保在用户交互后播放音频。", e);
-            });
-            toggleBtn.textContent = '⏸';
-        } else {
-            bgMusic.pause();
-            toggleBtn.textContent = '▶';
-        }
-    });
-</script>
-</body>
+    <!-- 音乐控制 -->
+<audio id="bg-music" preload="auto" loop>
+<source src=" https://www.youtube.com/watch?v=5qap5aO4i9A" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<div id="music-toggle" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 9999;
+    font-size: 18px;
+    color: #ff6b6b;
+">♪</div>
+    <script> 转成这里能用的 
 // ==================== 可调参数配置（在这里修改） ====================
 
 // 弹窗数量（桌面端显示的弹窗总数，移动端会自动减少到60%）
