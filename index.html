@@ -143,6 +143,28 @@ body {
 </head>
 <body>
     <div id="popup-container"></div>
+    <!-- 音乐控制 -->
+<audio id="bg-music" preload="auto" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5273b23c9c.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<div id="music-toggle" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 9999;
+    font-size: 18px;
+    color: #ff6b6b;
+">♪</div>
     <script>
 // ==================== 可调参数配置（在这里修改） ====================
 
