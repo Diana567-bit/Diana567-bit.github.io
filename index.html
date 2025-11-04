@@ -139,10 +139,45 @@ body {
 .popup-animate-out {
     animation: popupFadeOut 0.3s ease forwards;
 }
+/* 音乐开关按钮样式 */
+#music-toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 2000;
+    padding: 12px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    font-family: 'Poppins', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.15),
+        0 2px 8px rgba(255, 255, 255, 0.08) inset;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+#music-toggle:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.24);
+}
+
+#music-toggle.playing::after {
+    content: ' 播放中';
+    font-weight: 500;
+}
     </style>
 </head>
 <body>
     <div id="popup-container"></div>
+    <audio id="bgm" src="assets/beautiful.mp3" preload="auto" loop></audio>
+    <button id="music-toggle" aria-label="播放/暂停音乐">♪</button>
     <script>
 // ==================== 可调参数配置（在这里修改） ====================
 
@@ -444,6 +479,93 @@ document.addEventListener('DOMContentLoaded', function () {
     if (AUTO_REFRESH_INTERVAL > 0) {
         setInterval(generatePopups, AUTO_REFRESH_INTERVAL);
     }
+
+    // ====== 背景音乐初始化 ======
+    const MUSIC_VOLUME = 0.32; // 目标音量
+    const VOLUME_FADE_MS = 1500; // 淡入时长
+    const audioEl = document.getElementById('bgm');
+    const toggleBtn = document.getElementById('music-toggle');
+    let userToggledPlay = false; // 记录用户是否主动开启过
+
+    // 初始音量设为0，播放后淡入
+    audioEl.volume = 0.0;
+
+    function fadeVolumeTo(targetVolume, durationMs) {
+        const start = audioEl.volume;
+        const delta = targetVolume - start;
+        if (durationMs <= 0 || Math.abs(delta) < 0.001) {
+            audioEl.volume = targetVolume;
+            return;
+        }
+        const startTime = performance.now();
+        function step(now) {
+            const progress = Math.min(1, (now - startTime) / durationMs);
+            audioEl.volume = start + delta * progress;
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        }
+        requestAnimationFrame(step);
+    }
+
+    async function startMusic() {
+        try {
+            if (audioEl.paused) {
+                await audioEl.play();
+                fadeVolumeTo(MUSIC_VOLUME, VOLUME_FADE_MS);
+            } else {
+                fadeVolumeTo(MUSIC_VOLUME, 300);
+            }
+            toggleBtn.classList.add('playing');
+            toggleBtn.textContent = '⏸';
+        } catch (e) {
+            console.warn('自动/点击播放被阻止或失败：', e);
+        }
+    }
+
+    function pauseMusic() {
+        audioEl.pause();
+        toggleBtn.classList.remove('playing');
+        toggleBtn.textContent = '▶';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        if (audioEl.paused) {
+            userToggledPlay = true;
+            startMusic();
+        } else {
+            userToggledPlay = false;
+            pauseMusic();
+        }
+    });
+
+    // 首次用户交互时尝试自动开始（兼容移动端策略）
+    const onceStart = () => {
+        if (audioEl.paused) {
+            startMusic();
+        }
+    };
+    ['click', 'touchstart', 'keydown'].forEach(evt => {
+        window.addEventListener(evt, onceStart, { once: true, passive: true });
+    });
+
+    // 页面可见性变化时的自动暂停/恢复
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            if (!audioEl.paused) {
+                pauseMusic();
+            }
+        } else {
+            if (userToggledPlay) {
+                startMusic();
+            }
+        }
+    });
+
+    // 音频错误提示（多为资源未找到）
+    audioEl.addEventListener('error', () => {
+        console.warn('背景音乐资源加载失败：请将 mp3 放在 assets/beautiful.mp3 或修改 <audio> 的 src。');
+    });
 });
     </script>
 </body>
