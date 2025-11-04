@@ -147,9 +147,9 @@ body {
     z-index: 2000;
     padding: 12px 16px;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    background: rgba(255, 255, 255, 0.18);
-    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.45);
+    color: #1a1a1a;
     font-family: 'Poppins', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 16px;
     font-weight: 600;
@@ -157,15 +157,16 @@ body {
     backdrop-filter: blur(14px) saturate(160%);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
     box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.15),
+        0 8px 24px rgba(0, 0, 0, 0.2),
         0 2px 8px rgba(255, 255, 255, 0.08) inset;
     cursor: pointer;
+    pointer-events: auto;
     transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 #music-toggle:hover {
     transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.6);
 }
 
 #music-toggle.playing::after {
@@ -176,8 +177,8 @@ body {
 </head>
 <body>
     <div id="popup-container"></div>
-    <audio id="bgm" src="assets/beautiful.mp3" preload="auto" loop></audio>
-    <button id="music-toggle" aria-label="播放/暂停音乐">♪</button>
+    <audio id="bgm" src="https://assets.mixkit.co/music/preview/mixkit-romantic-sleepy-piano-2898.mp3" preload="auto" loop></audio>
+    <button id="music-toggle" aria-label="播放/暂停音乐">▶ 音乐</button>
     <script>
 // ==================== 可调参数配置（在这里修改） ====================
 
